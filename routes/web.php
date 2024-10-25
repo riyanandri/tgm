@@ -1,9 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\BukuController;
-use App\Http\Controllers\PembacaController;
-use App\Http\Controllers\MembacaController;
+use App\Http\Controllers\ReadingProficiencyLevelController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,23 +16,38 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('beranda');
-});
-//Buku
-Route::get('/buku', [BukuController::class, 'index'])->name('buku.index');
-Route::get('/tambahbuku', [BukuController::class, 'create'])->name('buku.create');
-Route::post('/buku', [BukuController::class, 'store'])->name('buku.create');
+    return view('home');
+})->name('home');
 
+//categories
+Route::get('/categories', [\App\Http\Controllers\CategoryController::class, 'index'])->name('categories');
+Route::get('/category/create', [\App\Http\Controllers\CategoryController::class, 'create'])->name('category.add');
+Route::post('/category', [\App\Http\Controllers\CategoryController::class, 'store'])->name('category.store');
+Route::get('/category/{id}/edit', [\App\Http\Controllers\CategoryController::class, 'edit'])->name('category.edit');
+Route::put('/category/{id}', [\App\Http\Controllers\CategoryController::class, 'update'])->name('category.update');
+Route::delete('/category/{id}', [\App\Http\Controllers\CategoryController::class, 'destroy'])->name('category.destroy');
 
-//Pembaca
-Route::get('/pembaca', [PembacaController::class, 'index'])->name('pembaca.index');
-Route::get('/tambahpembaca', [PembacaController::class, 'create'])->name('pembaca.create');
-Route::post('/pembaca', [PembacaController::class ])->name('pembaca.pembaca');
+//books
+Route::get('/books', [\App\Http\Controllers\BookController::class, 'index'])->name('books');
+Route::get('/book/create', [\App\Http\Controllers\BookController::class, 'create'])->name('book.add');
+Route::post('/book', [\App\Http\Controllers\BookController::class, 'store'])->name('book.store');
+Route::get('/book/{id}/edit', [\App\Http\Controllers\BookController::class, 'edit'])->name('book.edit');
+Route::put('/book/{id}', [\App\Http\Controllers\BookController::class, 'update'])->name('book.update');
+Route::delete('/book/{id}', [\App\Http\Controllers\BookController::class, 'destroy'])->name('book.destroy');
 
+//readers
+Route::get('/readers', [\App\Http\Controllers\ReaderController::class, 'index'])->name('readers');
+Route::get('/reader/create', [\App\Http\Controllers\ReaderController::class, 'create'])->name('reader.add');
+Route::post('/reader', [\App\Http\Controllers\ReaderController::class, 'store'])->name('reader.store');
 
-//Membaca
-Route::get('/membaca', [MembacaController::class, 'index'])->name('membaca.index');
-Route::get('/tambahmembaca', [MembacaController::class, 'create'])->name('membaca.create');
+//reading_activities
+Route::get('/read-activity', [\App\Http\Controllers\ReadingActivityController::class, 'index'])->name('read.activity');
+Route::get('/read-activity/create', [\App\Http\Controllers\ReadingActivityController::class, 'create'])->name('read.activity.add');
+Route::post('/read-activity', [\App\Http\Controllers\ReadingActivityController::class, 'store'])->name('read.activity.store');
+Route::post('/read-activity/{id}/update-duration', [\App\Http\Controllers\ReadingActivityController::class, 'update'])->name('read.activity.update.duration');
+
+// reading proficiency level
+Route::get('/reading-statistics', [\App\Http\Controllers\ReadingProficiencyLevelController::class, 'readingStatistics'])->name('reading.statistic');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

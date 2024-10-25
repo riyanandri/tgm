@@ -1,103 +1,59 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Website</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #ffffff;
-            padding: 20px 50px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .logo img {
-            width: 50px;
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-            gap: 20px;
-            margin: 0;
-            padding: 0;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: black;
-        }
-
-        .intro {
-            background-image: url(https://i.pinimg.com/originals/e9/ba/23/e9ba232b196c79fbba7cd1a4cb5d41bf.jpg);
-            /* background-repeat: repeat; /* Atur pengulangan gambar (opsional) */
-            /* background-size: cover; Atur ukuran gambar (opsional) */
-            background-width: 20px;
-            background-height: 80px;
-            background-size:100px;
-            padding: 20px 20px;
-            text-align: center;
-            font-size: 1.2em;
-            color: white;
-        }
-
-        .options {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin: 80px 0;
-        }
-
-        .option {
-            background-color: white;
-            padding: 50px;
-            border: 3px solid #ccc;
-            border-radius: 5px;
-            text-align: center;
-            transition: transform 0.2s;
-            text-decoration: none;
-            color: black;
-            font-size: 1em;
-        }
-
-        .option:hover {
-            transform: scale(1.05);
-        }
-
-        .about {
-            background-color: #e0e0e0;
-            padding: 20px;
-            text-align: center;
-        }
-
-        footer {
-            text-align: center;
-            padding: 10px;
-            background-color: #ffffff;
-            box-shadow: 0 -2px 4px rgba(0,0,0,0.1);
-        }
-    </style>
-    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <title>Literasi Sosial</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Sweetalert2 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+    @vite(['resources/js/app.js', 'resources/css/app.css'])
+    @stack('styles')
 </head>
 <body>
-    @include('components.navbar')
-    <main>
-        @yield('content')
-        @include('components.about')
-    </main>
-    @include('components.footer')
 
-    <script src="{{ asset('js/jquery-3.2.1.slim.min.js') }}"></script>
-    <script src="{{ asset('js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('js/popper.min.js') }}"></script>
+@include('components.navbar')
+
+@yield('content')
+
+@include('components.about')
+
+@include('components.footer')
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap 5 JS and dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<!-- Sweetalert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    var collapseCard = document.getElementById('collapseCardExample');
+    var toggleButton = document.getElementById('toggleButton');
+    var toggleIcon = document.getElementById('toggleIcon');
+
+    collapseCard.addEventListener('show.bs.collapse', function () {
+        toggleIcon.classList.remove('bi-plus-lg');
+        toggleIcon.classList.add('bi-dash-lg');
+    });
+
+    collapseCard.addEventListener('hide.bs.collapse', function () {
+        toggleIcon.classList.remove('bi-dash-lg');
+        toggleIcon.classList.add('bi-plus-lg');
+    });
+    $(document).ready(function() {
+        $('.select2').select2({
+            width: '100%'
+        });
+    });
+</script>
+@stack('scripts')
 </body>
 </html>

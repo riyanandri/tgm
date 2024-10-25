@@ -1,0 +1,170 @@
+/* CTA Section Image Slider */
+.cta-section {
+    padding: 0;
+}
+
+.cta-section .carousel-item {
+    height: 500px;
+}
+
+.cta-section .carousel-item img {
+    object-fit: cover;
+    height: 100%;
+}
+
+/* Cards Section */
+.cards-section .card {
+    padding: 20px;
+    border-radius: 10px;
+    transition: transform 0.3s;
+}
+
+.cards-section .card:hover {
+    transform: scale(1.05);
+    transition: transform 0.2s;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.cards-section .card-body i {
+    color: #007bff;
+}
+
+.carousel-item img {
+    height: 500px;
+    object-fit: cover;
+}
+
+/* Login Section */
+body {
+    background-color: #f8f9fa;
+}
+
+.login-section {
+    padding: 100px 0;
+}
+
+.login-section .card {
+    padding: 30px;
+    border-radius: 10px;
+}
+
+.login-section .card-body {
+    text-align: center;
+}
+
+.login-section .btn {
+    font-size: 1.1rem;
+    padding: 10px;
+}
+
+.login-section .form-label {
+    text-align: left;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.login-section input {
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.form-label {
+    text-align: left;
+    display: block; /* Ensures the label takes full width */
+    font-weight: 500; /* Keep this or adjust to your preference */
+}
+
+/* Styling for the Book List Section */
+.book-list-section {
+    padding: 50px 0;
+}
+
+.table {
+    border: 1px solid #dee2e6;
+    border-radius: 10px; /* Make corners rounded */
+    font-size: 1rem;
+    overflow: hidden; /* Ensures inner borders don't spill out */
+}
+
+.table th, .table td {
+    vertical-align: middle;
+}
+
+.table thead th:first-child {
+    border-top-left-radius: 10px; /* Top-left rounded corner */
+}
+
+.table thead th:last-child {
+    border-top-right-radius: 10px; /* Top-right rounded corner */
+}
+
+.table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 10px; /* Bottom-left rounded corner */
+}
+
+.table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 10px; /* Bottom-right rounded corner */
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+/* Add Book Section Styles */
+.add-book-section {
+    padding: 50px 0;
+}
+
+.add-book-section .card {
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.add-book-section .btn {
+    font-size: 1.1rem;
+    padding: 10px;
+}
+
+.add-book-section label {
+    font-weight: 500;
+}
+
+/* Heading Styles */
+h1 {
+    font-weight: 700; /* Ensure h1 is bold */
+}
+
+/* About Section */
+.about-section {
+    padding: 50px 0;
+    text-align: center;
+    background-color: #e9ecef;
+}
+
+.footer {
+    padding: 20px 0;
+    background-color: #f8f9fa;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+.select2-container .select2-selection--single {
+    height: 38px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.select2-container .select2-selection--single .select2-selection__arrow {
+    height: 38px;
+    width: 38px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.select2-selection__arrow b {
+    border-width: 0.35em 0.35em 0 0.35em;
+}

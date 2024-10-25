@@ -1,3 +1,6 @@
-<footer class="container">
+<!-- Footer -->
+<footer class="footer">
+    <div class="container">
         <p>Created by Baruna Bima</p>
-    </footer>
+    </div>
+</footer>
