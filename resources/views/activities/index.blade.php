@@ -1,5 +1,9 @@
 @extends('layouts.template')
 
+@push('styles')
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+@endpush
+
 @section('content')
     @if (session('success'))
         <script>
@@ -20,17 +24,59 @@
     <section class="book-list-section">
         <div class="container mt-5">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2>Data Membaca</h2>
-                <div class="search-bar">
-                    <label for="search">Search: </label>
-                    <input type="text" id="search" class="form-control d-inline-block" style="width: 200px;">
+                <h3>Data Membaca</h3>
+                <div class="align-items-end">
+                    <a href="#" class="text-decoration-none">
+                        <button class="btn btn-icon btn-success">
+                            <i class="bi bi-file-earmark-spreadsheet"></i> Impor Data Membaca
+                        </button>
+                    </a>
+                    <a href="{{ route('read.activity.add') }}" class="text-decoration-none">
+                        <button class="btn btn-icon btn-primary">
+                            <i class="bi bi-folder"></i> Tambah Data Membaca
+                        </button>
+                    </a>
                 </div>
             </div>
 
-            <div class="d-flex mb-3">
-                <a href="{{ route('read.activity.add') }}">
-                    <button class="btn btn-primary">Tambah Data Membaca</button>
-                </a>
+            <div class="card mb-3">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <span>Filter</span>
+                    <button class="btn btn-sm btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCardExample" aria-expanded="false" aria-controls="collapseCardExample" id="toggleButton">
+                        <i class="bi bi-plus-lg" id="toggleIcon"></i>
+                    </button>
+                </div>
+                <div class="collapse" id="collapseCardExample">
+                    <div class="card-body">
+                        <form action="{{ route('read.activity') }}" method="GET">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label for="reader_name" class="form-label">Nama Pembaca</label>
+                                    <select class="form-control select2" id="reader_name" name="reader_name">
+                                        <option value=""></option>
+                                        @foreach(\App\Models\Reader::orderBy('name', 'ASC')->get() as $reader)
+                                            <option value="{{ $reader->id }}" {{ request('reader_name') == $reader->id ? 'selected' : '' }}>{{ $reader->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="book" class="form-label">Judul Buku</label>
+                                    <select class="form-control select2" id="book" name="book">
+                                        <option value=""></option>
+                                        @foreach(\App\Models\Book::orderBy('title', 'ASC')->get() as $book)
+                                            <option value="{{ $book->id }}" {{ request('book') == $book->id ? 'selected' : '' }}>{{ $book->title }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="date_range" class="form-label">Tanggal Membaca</label>
+                                    <input type="text" id="date_range" name="date_range" class="form-control" value="{{ old('date_range', $date_range) }}">
+                                </div>
+                            </div>
+                            @include('components.button-filter')
+                        </form>
+                    </div>
+                </div>
             </div>
 
             <div class="table-responsive">
@@ -58,15 +104,24 @@
                             <td>{{ Carbon::parse($item->reading_date)->locale('id')->isoFormat('dddd, D MMMM YYYY') }}</td>
                             <td id="duration-{{ $item->id }}">{{ $item->reading_duration }}</td>
                             <td>
-                                @if ($item->reading_duration === '00:00:00')
-                                    <button id="start-stop-btn-{{ $item->id }}" class="btn btn-primary btn-sm" onclick="startStopTimer({{ $item->id }})">
-                                        <i class="bi bi-play-fill"></i> Mulai
-                                    </button>
-                                @else
-                                    <button id="start-stop-btn-{{ $item->id }}" class="btn btn-warning btn-sm" onclick="resetTimer({{ $item->id }})">
-                                        <i class="bi bi-arrow-repeat"></i> Ulangi
-                                    </button>
-                                @endif
+                                <div class="d-flex justify-content-center gap-2">
+                                    @if ($item->reading_duration === '00:00:00')
+                                        <button id="start-stop-btn-{{ $item->id }}" class="btn btn-primary btn-sm" onclick="startStopTimer({{ $item->id }})">
+                                            <i class="bi bi-play-fill"></i> Mulai
+                                        </button>
+                                    @else
+                                        <button id="start-stop-btn-{{ $item->id }}" class="btn btn-warning btn-sm" onclick="resetTimer({{ $item->id }})">
+                                            <i class="bi bi-arrow-repeat"></i> Ulangi
+                                        </button>
+                                    @endif
+                                        <form id="delete-form-{{ $item->id }}" action="{{ route('read.activity.destroy', $item->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete({{ $item->id }})">
+                                                <i class="bi bi-trash-fill"></i> Hapus
+                                            </button>
+                                        </form>
+                                </div>
                             </td>
                         </tr>
                     @empty
@@ -76,12 +131,15 @@
                     @endforelse
                     </tbody>
                 </table>
+                {{ $activities->links('components.pagination') }}
             </div>
         </div>
     </section>
 @endsection
 @push('scripts')
-<script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<script type="text/javascript">
     let timers = {};  // To store timers for each activity
 
     function startStopTimer(activityId) {
@@ -190,6 +248,34 @@
         })
         .catch((error) => {
             console.error('Error:', error);
+        });
+    }
+
+    $(document).ready(function() {
+        $('#date_range').daterangepicker({
+            locale: {
+                format: 'YYYY-MM-DD'
+            },
+            startDate: "{{ explode(' - ', request('date_range', $date_range))[0] }}",
+            endDate: "{{ explode(' - ', request('date_range', $date_range))[1] }}"
+        });
+    });
+
+
+    function confirmDelete(id) {
+        Swal.fire({
+            title: 'Yakin ingin menghapus?',
+            text: "data yang telah dihapus tidak dapat dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById('delete-form-' + id).submit();
+            }
         });
     }
 </script>

@@ -21,7 +21,7 @@
         <div class="container mt-5">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h3>Kategori Buku</h3>
-                <a href="{{ route('category.add') }}">
+                <a href="{{ route('category.add') }}" class="text-decoration-none">
                     <button class="btn btn-icon btn-primary">
                         <i class="bi bi-folder-plus"></i> Tambah Kategori
                     </button>

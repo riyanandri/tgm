@@ -69,7 +69,9 @@ class ReaderController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $reader = Reader::findOrFail($id);
+
+        return view('readers.edit', compact('reader'));
     }
 
     /**
@@ -77,7 +79,18 @@ class ReaderController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => ['required'],
+            'gender' => ['required', 'in:Laki-laki,Perempuan'],
+            'phone' => ['required'],
+            'date_of_birth' => ['required', 'date'],
+            'agency' => ['required', 'string']
+        ]);
+
+        $reader = Reader::findOrFail($id);
+        $reader->update($request->all());
+
+        return redirect()->route('readers')->with('success', 'Data pembaca berhasil diupdate');
     }
 
     /**
@@ -85,6 +98,10 @@ class ReaderController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $reader = Reader::findOrFail($id);
+
+        $reader->delete();
+
+        return redirect()->route('readers')->with('success', 'Data pembaca berhasil dihapus');
     }
 }

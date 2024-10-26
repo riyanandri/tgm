@@ -88,14 +88,20 @@
                             <td>{{ $item->phone }}</td>
                             <td>{{ $item->agency }}</td>
                             <td>
-                                <a href="#">
-                                    <button class="btn btn-warning btn-sm me-2">
-                                        <i class="bi bi-pencil-fill"></i> Ubah
-                                    </button>
-                                </a>
-                                <button type="button" class="btn btn-danger btn-sm">
-                                    <i class="bi bi-trash-fill"></i> Hapus
-                                </button>
+                                <div class="d-flex justify-content-center gap-2">
+                                    <a href="{{ route('reader.edit', $item->id) }}">
+                                        <button class="btn btn-warning btn-sm">
+                                            <i class="bi bi-pencil-fill"></i> Ubah
+                                        </button>
+                                    </a>
+                                    <form id="delete-form-{{ $item->id }}" action="{{ route('reader.destroy', $item->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete({{ $item->id }})">
+                                            <i class="bi bi-trash-fill"></i> Hapus
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     @empty
@@ -110,3 +116,23 @@
         </div>
     </section>
 @endsection
+@push('scripts')
+    <script>
+        function confirmDelete(id) {
+            Swal.fire({
+                title: 'Yakin ingin menghapus?',
+                text: "data yang telah dihapus tidak dapat dikembalikan!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-form-' + id).submit();
+                }
+            });
+        }
+    </script>
+@endpush

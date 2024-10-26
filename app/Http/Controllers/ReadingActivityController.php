@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\Reader;
 use App\Models\ReadingActivity;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ReadingActivityController extends Controller
@@ -13,11 +14,31 @@ class ReadingActivityController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $activities = ReadingActivity::latest()->get();
+        $reader = $request->input('reader_name');
+        $book = $request->input('book');
 
-        return view('activities.index', compact('activities'));
+        if ($request->has('date_range')) {
+            $dates = explode(' - ', $request->input('date_range'));
+            $startDate = Carbon::parse($dates[0])->startOfDay();
+            $endDate = Carbon::parse($dates[1])->endOfDay();
+        } else {
+            $startDate = Carbon::now()->subMonths(1)->startOfDay();
+            $endDate = Carbon::now()->endOfDay();
+        }
+
+        $activities = ReadingActivity::when($request->input('reader_name'), function ($query, $reader) {
+            return $query->where('reader_id', $reader);
+        })->when($request->input('book'), function ($query, $book) {
+            return $query->where('book_id', $book);
+        })->whereBetween('reading_date', [$startDate, $endDate])->latest()->paginate(10);
+
+
+        return view('activities.index', [
+            'activities' => $activities,
+            'date_range' => $startDate->format('Y-m-d') . ' - ' . $endDate->format('Y-m-d'),
+        ]);
     }
 
     /**
@@ -88,6 +109,10 @@ class ReadingActivityController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $activity = ReadingActivity::findOrFail($id);
+
+        $activity->delete();
+
+        return redirect()->route('read.activity')->with('success', 'Data membaca berhasil dihapus');
     }
 }

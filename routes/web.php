@@ -39,12 +39,16 @@ Route::delete('/book/{id}', [\App\Http\Controllers\BookController::class, 'destr
 Route::get('/readers', [\App\Http\Controllers\ReaderController::class, 'index'])->name('readers');
 Route::get('/reader/create', [\App\Http\Controllers\ReaderController::class, 'create'])->name('reader.add');
 Route::post('/reader', [\App\Http\Controllers\ReaderController::class, 'store'])->name('reader.store');
+Route::get('/reader/{id}/edit', [\App\Http\Controllers\ReaderController::class, 'edit'])->name('reader.edit');
+Route::put('/reader/{id}', [\App\Http\Controllers\ReaderController::class, 'update'])->name('reader.update');
+Route::delete('/reader/{id}', [\App\Http\Controllers\ReaderController::class, 'destroy'])->name('reader.destroy');
 
 //reading_activities
 Route::get('/read-activity', [\App\Http\Controllers\ReadingActivityController::class, 'index'])->name('read.activity');
 Route::get('/read-activity/create', [\App\Http\Controllers\ReadingActivityController::class, 'create'])->name('read.activity.add');
 Route::post('/read-activity', [\App\Http\Controllers\ReadingActivityController::class, 'store'])->name('read.activity.store');
 Route::post('/read-activity/{id}/update-duration', [\App\Http\Controllers\ReadingActivityController::class, 'update'])->name('read.activity.update.duration');
+Route::delete('/read-activity/{id}', [\App\Http\Controllers\ReadingActivityController::class, 'destroy'])->name('read.activity.destroy');
 
 // reading proficiency level
 Route::get('/reading-statistics', [\App\Http\Controllers\ReadingProficiencyLevelController::class, 'readingStatistics'])->name('reading.statistic');

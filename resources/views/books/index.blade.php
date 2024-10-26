@@ -22,12 +22,12 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h3>Buku</h3>
                 <div class="align-items-end">
-                    <a href="{{ route('categories') }}" class="ms-2">
+                    <a href="{{ route('categories') }}" class="text-decoration-none">
                         <button class="btn btn-icon btn-secondary">
                             <i class="bi bi-folder"></i> Kategori Buku
                         </button>
                     </a>
-                    <a href="{{ route('book.add') }}">
+                    <a href="{{ route('book.add') }}" class="text-decoration-none">
                         <button class="btn btn-icon btn-primary">
                             <i class="bi bi-folder-plus"></i> Tambah Buku
                         </button>
