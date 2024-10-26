@@ -13,6 +13,7 @@ class ReadingProficiencyLevelController extends Controller
 {
     public function readingStatistics(Request $request)
     {
+        $reader = $request->input('reader_name');
         if ($request->has('date_range')) {
             $dates = explode(' - ', $request->input('date_range'));
             $startDate = Carbon::parse($dates[0])->startOfDay();
@@ -27,7 +28,9 @@ class ReadingProficiencyLevelController extends Controller
             $query->whereBetween('reading_date', [$startDate, $endDate])
                   ->select('book_id', 'reading_date', 'reading_duration', 'reader_id')
                   ->with('book');
-        }])->get();
+        }])->when($reader, function ($query, $reader) {
+            $query->where('id', $reader);
+        })->get();
 
         $activities = $data->map(function ($reader) use ($startDate, $endDate) {
             $groupedByDate = $reader->activity->groupBy(function ($activity) {

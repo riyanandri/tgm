@@ -26,9 +26,9 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h3>Data Membaca</h3>
                 <div class="align-items-end">
-                    <a href="#" class="text-decoration-none">
-                        <button class="btn btn-icon btn-success">
-                            <i class="bi bi-file-earmark-spreadsheet"></i> Impor Data Membaca
+                    <a href="#" data-bs-toggle="modal" data-bs-target="#importModal" class="text-decoration-none">
+                        <button type="button" class="btn btn-icon btn-success">
+                            <i class="bi bi-filetype-xls"></i> Impor Data Membaca
                         </button>
                     </a>
                     <a href="{{ route('read.activity.add') }}" class="text-decoration-none">
@@ -135,6 +135,31 @@
             </div>
         </div>
     </section>
+
+    <!-- Modal Structure -->
+    <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tgmModalLabel">Impor Data Membaca</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('read.activity.import') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="mb-3">
+                            <label for="import_file" class="form-label">Impor Data (Excel)</label>
+                            <input type="file" name="import_file" class="form-control" id="import_file">
+                        </div>
+                        <button type="submit" class="btn btn-success">Impor Data</button>
+                        <a href="{{ route('read.activity.download_template') }}" class="btn btn-primary">
+                            <i class="bi bi-filetype-xls"></i> Unduh Template Excel
+                        </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 @push('scripts')
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment@2.29.1/min/moment.min.js"></script>

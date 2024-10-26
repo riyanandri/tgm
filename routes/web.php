@@ -49,6 +49,8 @@ Route::get('/read-activity/create', [\App\Http\Controllers\ReadingActivityContro
 Route::post('/read-activity', [\App\Http\Controllers\ReadingActivityController::class, 'store'])->name('read.activity.store');
 Route::post('/read-activity/{id}/update-duration', [\App\Http\Controllers\ReadingActivityController::class, 'update'])->name('read.activity.update.duration');
 Route::delete('/read-activity/{id}', [\App\Http\Controllers\ReadingActivityController::class, 'destroy'])->name('read.activity.destroy');
+Route::get('/reading-activity/download-template', [\App\Http\Controllers\ReadingActivityController::class, 'downloadTemplate'])->name('read.activity.download_template');
+Route::post('/reading-activity/import', [\App\Http\Controllers\ReadingActivityController::class, 'import'])->name('read.activity.import');
 
 // reading proficiency level
 Route::get('/reading-statistics', [\App\Http\Controllers\ReadingProficiencyLevelController::class, 'readingStatistics'])->name('reading.statistic');

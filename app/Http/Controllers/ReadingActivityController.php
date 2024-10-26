@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ReadingActivityTemplateExport;
 use App\Http\Controllers\Controller;
+use App\Imports\ReadingActivityImport;
 use App\Models\Book;
 use App\Models\Reader;
 use App\Models\ReadingActivity;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReadingActivityController extends Controller
 {
@@ -114,5 +117,21 @@ class ReadingActivityController extends Controller
         $activity->delete();
 
         return redirect()->route('read.activity')->with('success', 'Data membaca berhasil dihapus');
+    }
+
+    public function downloadTemplate()
+    {
+        return Excel::download(new ReadingActivityTemplateExport, 'Data Membaca.xls');
+    }
+
+    public function import(Request $request)
+    {
+        $request->validate([
+            'import_file' => 'required|mimes:xlsx,xls,csv',
+        ]);
+
+        Excel::import(new ReadingActivityImport, $request->file('import_file'));
+
+        return redirect()->route('read.activity')->with('success', 'Data membaca berhasil diimpor');
     }
 }

@@ -7,27 +7,52 @@
 @section('content')
 <section class="reader-list-section">
     <div class="container mt-5">
-        <h1 style="font-size: 2rem; font-weight: 500; text-align: center;">Statistik Pembaca</h1>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3>Tingkat Kegemaran Membaca</h3>
+            <div class="align-items-end">
+                <a href="#" class="text-decoration-none">
+                    <button class="btn btn-icon btn-success">
+                        <i class="bi bi-filetype-xls"></i> Ekspor Data TGM
+                    </button>
+                </a>
+                <a href="#" data-bs-toggle="modal" data-bs-target="#tgmModal" class="text-decoration-none">
+                    <button type="button" class="btn btn-icon btn-primary">
+                        <i class="bi bi-file-earmark-bar-graph"></i> TGM Keseluruhan
+                    </button>
+                </a>
+            </div>
+        </div>
 
-        <form action="{{ route('reading.statistic') }}" method="GET">
-            <div class="row my-3">
-                <div class="col-md-3">
-                    <label class="mb-2" for="date_range">Rentang Tanggal</label>
-                    <input type="text" id="date_range" name="date_range" class="form-control" value="{{ isset($start_date) && isset($end_date) ? $start_date . ' - ' . $end_date : '' }}">
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Filter</span>
+                <button class="btn btn-sm btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCardExample" aria-expanded="false" aria-controls="collapseCardExample" id="toggleButton">
+                    <i class="bi bi-plus-lg" id="toggleIcon"></i>
+                </button>
+            </div>
+            <div class="collapse" id="collapseCardExample">
+                <div class="card-body">
+                    <form action="{{ route('reading.statistic') }}" method="GET">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="reader_name" class="form-label">Nama Pembaca</label>
+                                <select class="form-control select2" id="reader_name" name="reader_name">
+                                    <option value=""></option>
+                                    @foreach(\App\Models\Reader::orderBy('name', 'ASC')->get() as $reader)
+                                        <option value="{{ $reader->id }}" {{ request('reader_name') == $reader->id ? 'selected' : '' }}>{{ $reader->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label for="date_range" class="form-label">Tanggal Membaca</label>
+                                <input type="text" id="date_range" name="date_range" class="form-control" value="{{ isset($start_date) && isset($end_date) ? $start_date . ' - ' . $end_date : '' }}">
+                            </div>
+                        </div>
+                        @include('components.button-filter')
+                    </form>
                 </div>
             </div>
-            <div class="d-flex mb-3">
-                <a>
-                    <button type="submit" class="btn btn-primary">Terapkan</button>
-                </a>
-                <a href="{{ route('reading.statistic') }}" class="ms-2">
-                    <button class="btn btn-danger">Reset</button>
-                </a>
-                <a href="#" data-bs-toggle="modal" data-bs-target="#tgmModal" class="ms-2">
-                    <button type="button" class="btn btn-success">TGM Keseluruhan</button>
-                </a>
-            </div>
-        </form>
+        </div>
 
         <div class="table-responsive">
             <table class="table table-bordered text-center">
