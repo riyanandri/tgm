@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->enum('gender', ['Laki-laki','Perempuan']);
-            $table->string('phone');
+            $table->string('phone')->nullable();
             $table->text('address');
             $table->date('date_of_birth');
             $table->string('agency');
