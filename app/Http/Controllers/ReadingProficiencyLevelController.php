@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ReadingStatisticExport;
 use App\Http\Controllers\Controller;
 use App\Models\Reader;
 use App\Models\ReadingActivity;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReadingProficiencyLevelController extends Controller
 {
@@ -92,6 +94,10 @@ class ReadingProficiencyLevelController extends Controller
         $averageTGM = $activities->avg('tgm');
 
         $activities = $activities->sortByDesc('tgm');
+
+        if ($request->has('export') && $request->input('export') === 'excel') {
+            return Excel::download(new ReadingStatisticExport($activities, $averageTGM), 'Data Tingkat Kegemaran Membaca Periode ' . $startDate . ' - ' . $endDate . '.xls');
+        }
 
         return view('proficiency_level.statistic', [
             'activities' => $activities,

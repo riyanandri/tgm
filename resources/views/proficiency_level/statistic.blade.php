@@ -10,7 +10,7 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h3>Tingkat Kegemaran Membaca</h3>
             <div class="align-items-end">
-                <a href="#" class="text-decoration-none">
+                <a href="{{ route('reading.statistic', array_merge(request()->all(), ['export' => 'excel'])) }}" class="text-decoration-none">
                     <button class="btn btn-icon btn-success">
                         <i class="bi bi-filetype-xls"></i> Ekspor Data TGM
                     </button>
