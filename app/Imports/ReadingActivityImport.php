@@ -20,7 +20,13 @@ class ReadingActivityImport implements ToModel, WithHeadingRow
     {
         $reader = Reader::firstOrCreate(['name' => $row['reader_name']]);
         $book = Book::firstOrCreate(['title' => $row['book_title']]);
-        $readingDate = Carbon::createFromDate(1900, 1, 1)->addDays($row['reading_date'] - 2)->format('Y-m-d');
+
+        if (is_numeric($row['reading_date'])) {
+            $readingDate = Carbon::createFromDate(1900, 1, 1)->addDays($row['reading_date'] - 2)->format('Y-m-d');
+        } else {
+            $readingDate = Carbon::parse($row['reading_date'])->format('Y-m-d');
+        }
+
         $readingTimeDecimal = $row['reading_duration'];
         $totalSeconds = $readingTimeDecimal * 24 * 60 * 60;
 
