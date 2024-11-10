@@ -109,6 +109,7 @@
                     @endforelse
                 </tbody>
             </table>
+            {{ $activities->appends(request()->query())->links('components.pagination') }}
         </div>
     </div>
 </section>
@@ -131,9 +132,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($activities->sortByDesc('tgm') as $index => $reader)
+                        @forelse($activities as $index => $reader)
                             <tr>
-                                <td>{{ $index + 1 }}</td>
+                                <td>{{ ($activities->currentPage() - 1) * $activities->perPage() + $index + 1 }}</td>
                                 <td>{{ $reader['reader_name'] }}</td>
                                 <td>{{ $reader['tgm'] }}%</td>
                             </tr>

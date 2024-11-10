@@ -93,7 +93,7 @@ class ReadingProficiencyLevelController extends Controller
 
         $averageTGM = $activities->avg('tgm');
 
-        $activities = $activities->sortByDesc('tgm');
+        $activities = paginateCollection($activities->sortByDesc('tgm'), 10, $request->input('page'));
 
         if ($request->has('export') && $request->input('export') === 'excel') {
             return Excel::download(new ReadingStatisticExport($activities, $averageTGM), 'Data Tingkat Kegemaran Membaca Periode ' . $startDate . ' - ' . $endDate . '.xls');
